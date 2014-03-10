@@ -1,0 +1,11 @@
+.idea/
+app/lib/
+node_modules/
+.tmp/
+socket/composer.lock
+socket/vendor/
+log/
+dist/
+api/node_modules/
+api/npm-debug.log
+npm-debug.log

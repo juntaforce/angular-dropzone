@@ -1,0 +1,33 @@
+{
+	"name":"myBreyer Guide",
+	"version":"0.0.1",
+	"dependencies":{
+		"requirejs":"latest",
+		"less.js":"latest",
+		"sockjs":"http://cdn.sockjs.org/sockjs-0.3.min.js",
+		"requirejs-text":"2.0.5",
+		"almond":"0.2.5",
+		"normalize-css":"2.1.1",
+		"jquery": "http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js",
+		"jquery-ui":"http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js",
+		"ua-parser-js":"0.6.2",
+		"bootstrap":"latest",
+		"angular":"http://code.angularjs.org/1.2.13/angular.js",
+		"angular-resource":"http://code.angularjs.org/1.2.13/angular-resource.js",
+		"angular-route":"http://code.angularjs.org/1.2.13/angular-route.js",
+		"angular-loader":"http://code.angularjs.org/1.2.13/angular-loader.js",
+		"angular-cookies":"http://code.angularjs.org/1.2.13/angular-cookies.js",
+		"angular-animate":"http://code.angularjs.org/1.2.13/angular-animate.js",
+		"angular-sanitize":"http://code.angularjs.org/1.2.13/angular-sanitize.js",
+		"angular-touch":"http://code.angularjs.org/1.2.13/angular-touch.js",
+		"angular-bootstrap":"https://github.com/angular-ui/bootstrap/archive/ace7bc60e5981934ae370d40096ddf0e43b21538.zip"
+	},
+	"devDependencies":{
+		"chai":"1.5.0",
+		"mocha":"1.8.1",
+		"angular-mocks":"https://raw.github.com/guardian/bower-angular-mocks-unstable/606f37298d483f543bf0d3e5a88637143262c751/angular-mocks.js"
+	}
+}
+
+
+
