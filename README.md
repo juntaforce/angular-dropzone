@@ -1,7 +1,12 @@
 ![Screenshot](http://i.imgur.com/3Ljo26J.png)
 
-Brought to you by enyo<http://http://www.dropzonejs.com//>, a light weight JavaScript library that turns an HTML element into a dropzone.  Here I have brought you the same but modify
-library as an Angular Js Directive.
+A light weight JavaScript library that turns an HTML element into a dropzone, developed first by enyo <http://www.dropzonejs.com/>.  I have brought you the same but modify library as an Angular Js Directive.
+Working on introducing additional features as a native Angular Directive, allow for semantic and reusable code over you application.
+
+This directive will change the behavior of the element that it is attached too. The developer has full controll of the element and styles through the controller.
+
+Currently the application is in WIP and adding the $http service, which facilitated communication to a remote HTTP servers or JSONP.
+
 
 ![Screenshot](http://i.imgur.com/ZbeWmRR.png)
 ![Screenshot](http://i.imgur.com/3zZo3Dq.png)
