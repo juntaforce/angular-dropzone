@@ -11,9 +11,9 @@ angular.module ( 'app' ).directive
 						  , noop = function() {}
 						  , callbacks = {
 							  confirm:function( status, accepted, rejected ) {
-
 								  var question;
-								  switch(status){
+								  switch( status )
+								  {
 									  case STATUS.UPLOADING:
 										  question = defaultOptions.dictCancelUploadConfirmation
 										  break;
@@ -21,10 +21,11 @@ angular.module ( 'app' ).directive
 										  question = defaultOptions.dictRemoveFileConfirmation
 										  break;
 								  }
-
-								  if( window.confirm ( question ) ){
+								  if( window.confirm ( question ) )
+								  {
 									  return accepted ();
-								  }else if( rejected != null ){
+								  }else if( rejected != null )
+								  {
 									  return rejected ();
 								  }
 							  }
@@ -51,7 +52,7 @@ angular.module ( 'app' ).directive
 							  acceptedFiles:null,
 							  acceptedMimeTypes:null,
 							  autoProcessQueue:true,
-							  addRemoveLinks:true,
+							  addRemoveLinks:false,
 							  previewsContainer:null,
 							  allowDirectoryUpload:false,
 							  dictDefaultMessage:"Drop files here to upload",
@@ -66,6 +67,7 @@ angular.module ( 'app' ).directive
 							  dictRemoveFileConfirmation:null,
 							  dictMaxFilesExceeded:"You can not upload any more files.",
 							  previewTemplate:"<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-details\">\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n    <div class=\"dz-size\" data-dz-size></div>\n    <img data-dz-thumbnail />\n  </div>\n  <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-success-mark\"><i class=\"fa fa-check\"></i></div>\n  <div class=\"dz-error-mark\"><i class=\"fa fa-times\"></i></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>",
+							  previewRemoveTemplate:"<a class=\"dz-remove\" href=\"javascript:undefined;\">" + this.dictRemoveFile + "</a>",
 							  accept:function( file, done ) {
 								  return done ();
 							  },
@@ -123,12 +125,10 @@ angular.module ( 'app' ).directive
 								  if( !files.length )
 								  {
 									  return element.removeClass ( "dz-started" );
-									  defaultOptions.dragleave(e)
-
+									  defaultOptions.dragleave ( e )
 								  }
 							  },
 							  addedfile:function( file ) {
-								  var deferred = $q.defer ();
 								  file.previewElement = createElement ( defaultOptions.previewTemplate );
 								  file.previewTemplate = file.previewElement;
 								  file.previewElement.querySelector ( "[data-dz-name]" ).textContent = file.name;
@@ -136,42 +136,36 @@ angular.module ( 'app' ).directive
 								  //if set to true then add the removeLink
 								  if( defaultOptions.addRemoveLinks )
 								  {
-									  file._removeLink = createElement ( "<a class=\"dz-remove\" href=\"javascript:undefined;\">" + defaultOptions.dictRemoveFile + "</a>" );
+									  file._removeLink = createElement ( defaultOptions.previewRemoveTemplate );
 									  file._removeLink.addEventListener ( "click", function( e ) {
 										  e.preventDefault ();
 										  e.stopPropagation ();
 										  //Delete or Cancel button
-
-										  callbacks.confirm(STATUS.UPLOADING,function()
-										  {
+										  callbacks.confirm ( file.status, function() {
 											  defaultOptions.removedfile ( file );
-										  })
-
+										  } )
 									  } );
 									  file.previewElement.appendChild ( file._removeLink );
 								  }
 								  if( !_updateMaxFilesReachedClass () )
 								  {
-									  deferred.resolve ( file );
+									  element.append ( file.previewElement );
 								  }
-								  return deferred.promise;
 							  },
 							  removedfile:function( file ) {
 								  var _ref;
 								  if( (_ref = file.previewElement) != null )
 								  {
 									  _ref.parentNode.removeChild ( file.previewElement );
-
-									  for(var i = 0; i < files.length; i++){
-										  if(files[i].timeStamp == file.timeStamp){
-											  files.splice(i,1)
-
+									  for( var i = 0; i < files.length; i++ )
+									  {
+										  if( files[i].timeStamp == file.timeStamp )
+										  {
+											  files.splice ( i, 1 )
 										  }
 									  }
-
-									  cb('removedFile',file)
+									  cb ( 'removedFile', file )
 								  }
-
 								  defaultOptions.reset ();
 								  //								  return _updateMaxFilesReachedClass ();
 							  },
@@ -235,7 +229,6 @@ angular.module ( 'app' ).directive
 						  Object.keys ( scope[ attr.callbacks ] ).forEach ( function( key ) {
 							  callbacks[key] = scope[ attr.callbacks ][key]
 						  } );
-
 					  }
 					  var init = function() {
 						  if( element[0].tagName === "FORM" )
@@ -252,7 +245,6 @@ angular.module ( 'app' ).directive
 					  } ();
 
 					  function _updateMaxFilesReachedClass () {
-
 						  if( defaultOptions.maxFiles && getAcceptedFiles ().length >= defaultOptions.maxFiles )
 						  {
 							  element.addClass ( "dz-max-files-reached" );
@@ -262,8 +254,6 @@ angular.module ( 'app' ).directive
 							  element.removeClass ( "dz-max-files-reached" );
 							  return false
 						  }
-
-
 					  };
 					  function getAcceptedFiles () {
 						  var file, _i, _results;
@@ -450,29 +440,29 @@ angular.module ( 'app' ).directive
 							  total:file.size,
 							  bytesSent:0
 						  };
-
-						  file.timeStamp = Math.round((new Date()).getTime() / 1000);
+						  file.timeStamp = Math.round ( (new Date ()).getTime () / 1000 );
 						  files.push ( file );
 						  file.status = STATUS.ADDED;
-						  defaultOptions.addedfile ( file ).then ( function( file ) {
-
-							  //check if file size was not rejected
-							  if( defaultOptions.createImageThumbnails && file.type.match ( /image.*/ ) && file.size <= defaultOptions.maxThumbnailFilesize * 1024 * 1024 )
-							  {
-								  getBase64Images ( file )
-							  }
-							  element.append ( file.previewElement );
-							  return accept ( file, function( error ) {
-								  if( error )
-								  {
-									  return _errorProcessing ( [ file ], error );
-								  }else
-								  {
-									  return _enqueueFile ( file )
-								  }
-							  } );
-						  } )
+						  defaultOptions.addedfile ( file )
+						  //check if file size was not rejected
+						  if( defaultOptions.createImageThumbnails && file.type.match ( /image.*/ ) && file.size <= defaultOptions.maxThumbnailFilesize * 1024 * 1024 )
+						  {
+							  getBase64Images ( file )
+						  }
+						  appendThumbnail ( file )
 					  };
+					  function appendThumbnail ( file ) {
+						  return accept ( file, function( error ) {
+							  if( error )
+							  {
+								  return _errorProcessing ( [ file ], error );
+							  }else
+							  {
+								  return _enqueueFile ( file )
+							  }
+						  } );
+					  }
+
 					  function uploadFiles ( files ) {
 						  var file;
 						  for( var i = 0; i < files.length; i++ )
@@ -481,7 +471,6 @@ angular.module ( 'app' ).directive
 							  switch( defaultOptions.method )
 							  {
 								  case 'socket':
-									  cb ( 'onFileUpload', file )
 									  _set ( file );
 									  break;
 								  default:
@@ -674,11 +663,9 @@ angular.module ( 'app' ).directive
 					   * @param file {object}
 					   */
 					  function getBase64Images ( file ) {
-						  var fileReader;
-						  fileReader = new FileReader;
+						  var fileReader = new FileReader;
 						  fileReader.onload = function() {
-							  var img;
-							  img = new Image;
+							  var img = new Image;
 							  img.onload = function() {
 								  var canvas, ctx, resizeInfo, thumbnail, _ref, _ref1, _ref2, _ref3;
 								  file.width = img.width;
@@ -712,10 +699,20 @@ angular.module ( 'app' ).directive
 							  };
 							  return img.src = fileReader.result;
 						  };
+						  var setReadAsDataUrl = scope.$watch ( function() {
+																	return fileReader.readyState;
+																}
+							  , function( readyState ) {
+								  if( readyState != 2 )
+								  {
+									  return;
+								  }
+								  cb ( 'onFileUpload', file )
+								  setReadAsDataUrl ()
+							  }
+						  );
 						  return fileReader.readAsDataURL ( file );
 					  };
-
-
 					  /**
 					   * Converst image from kb to string format
 					   * @param size in kib
@@ -757,7 +754,6 @@ angular.module ( 'app' ).directive
 						  div.innerHTML = string;
 						  return div.childNodes[0];
 					  };
-
 					  /**
 					   *
 					   * @param callback {string}, takes the string and change to array to place multiple calls
@@ -768,7 +764,7 @@ angular.module ( 'app' ).directive
 						  // while safely failing if callback is not defined.
 						  try
 						  {
-							  callbacks[callback ] ( data )
+							  callbacks[callback ].call ( this, data )
 						  }catch( e )
 						  {
 							  // Callback not defined in the controller.
@@ -819,14 +815,11 @@ angular.module ( 'app' ).directive
 					   * @param n any value between 0 and 1
 					   */
 					  function _set ( file ) {
-						  var deferred = $q.defer();
-
+						  var deferred = $q.defer ();
 						  if( file.status != STATUS.UPLOADING )
 						  {
 							  return;
 						  }
-
-
 						  var n = file.upload.progress
 						  var pct = (n * 100) + '%';
 						  defaultOptions.uploadprogress ( file, pct )
@@ -834,25 +827,22 @@ angular.module ( 'app' ).directive
 						  file.incTimeout = $timeout ( function() {
 							  _inc ( file );
 						  }, 250 );
-
-
-						  if(n == 1 ){
-							  deferred.resolve(file);
+						  if( n == 1 )
+						  {
+							  deferred.resolve ( file );
 						  }
-
 						  return deferred.promise;
-
 					  }
 
 					  $rootScope.$on ( 'dropZone:completed', function( e, file ) {
 						  file.upload.progress = 1;
-						  _set ( file ).then(function(file){
+						  _set ( file ).then ( function( file ) {
 							  file.status = STATUS.SUCCESS;
-							  $timeout(function(){
+							  $timeout ( function() {
 								  _finished ( [file] )
-							  },1)
-						  })
-					  })
+							  }, 1 )
+						  } )
+					  } )
 				  }
 			  };
 			  return directive;
